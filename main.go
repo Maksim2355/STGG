@@ -1,7 +1,7 @@
 package main
 
 import (
-	"main/cmd"
+	"stgg/cmd"
 )
 
 func main() {
