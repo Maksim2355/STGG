@@ -5,36 +5,30 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
 // saveVariableCmd represents the saveVariable command
 var saveVariableCmd = &cobra.Command{
 	Use:   "saveVariable",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Сохранение переменной для последующей подстановки в шаблоны",
+	Long: `Следует сохранять переменные, которые не меняются от шаблона шаблону, а являются одинаковыми, такие как packgae_name и тд
+	Принимает на вход два аргумент:
+	VARIABLE_NAME-название переменной, которая будет определяться в шаблоне
+	VALUE-значение переменной
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Пример вызова:
+	stgg saveVariable VARIABLE_NAME VALUE
+
+	В случае если число аргументов не равно двум-выкидываестся ошибка
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("saveVariable called")
+		if len(args) != 2 {
+			printErrorAndStopProgramm("Число аргументов должно быть равным двум")
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(saveVariableCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// saveVariableCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// saveVariableCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

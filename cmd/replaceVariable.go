@@ -5,36 +5,26 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
-
 	"github.com/spf13/cobra"
 )
 
-// replaceVariableCmd represents the replaceVariable command
 var replaceVariableCmd = &cobra.Command{
 	Use:   "replaceVariable",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Short: "Заменяет переменную из ранее сохраненных",
+	Long: `Замена переменных из списка сохраненных переменных проекта
+	Первый аргумент-название переменной, которую мы хотим заменить VARIABLE_NAME
+	Второй аргумент-новое значение для переменной NEW_VALUE
+	
+	Пример вызова: stgg replaceVariable VARIABLE_NAME NEW_VALUE
+	
+	Если число аргумента больше или меньше двух или переменной нет в списке-выкидывается ошибка`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("replaceVariable called")
+		if len(args) != 2 {
+			printErrorAndStopProgramm("Необходимо два аргумента. Название переменной и новое значение")
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(replaceVariableCmd)
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// replaceVariableCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// replaceVariableCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

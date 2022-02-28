@@ -13,15 +13,32 @@ import (
 // generateCmd represents the generate command
 var generateCmd = &cobra.Command{
 	Use:   "generate",
-	Short: "A brief description of your command",
-	Long: `A longer description that spans multiple lines and likely contains examples
-and usage of using your command. For example:
+	Short: "Сгенерировать шаблон, который был ранее сохранен",
+	Long: `Генерация шаблона из списка ранее сохраненных.
+	На вход принимает:
+	TEMPLATE_NAME-название шаблона
+	Остальные аргументы зависят от флага
 
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
+	Первый способ вызова:
+	-lv: local variables в этом случае мы прописываем переменные для генерации в данной команде через двоеточие
+	variableName1 valueName1 где первое значение-названием переменной, прописанной в шаблоне, а второе - значение переменной
+	
+	Нечетные аргументы означают название переменной, а четные ее значение.
+	Если общее число аргументов нечетное-команда завершится с ошибкой
+	Пример команды с использованием флага -lv:
+	stgg generate TEMPLATE_NAME variable1 value1 variable2 value2 -lv
+
+	Второй способ вызова: 
+	-jsn получение переменных из json файла. В этом случае мы передаем один аргумент-путь до json файла с переменными
+	Читается только первый аргумент. Остальные игнорируются.
+
+	Пример команды с использованием -jsn
+	stgg generate TEMPLATE_NAME JSON_CONFIG_PATH -jsn
+
+	В случае если переменная содержащаяся в аргументах уже сохранена ранее с помошью командой saveVariable, то она будет переопределена
+	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("generate called")
+		fmt.Println("Старт генерации")
 	},
 }
 
