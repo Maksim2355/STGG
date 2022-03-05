@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"stgg/cmd/output"
+	"stgg/cmd/printer"
 
 	"github.com/spf13/cobra"
 )
@@ -18,7 +18,7 @@ var rootCmd = &cobra.Command{
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
-		output.PrintErrorAndExit(err.Error())
+		printer.PrintErrorAndExit(err.Error())
 	}
 }
 

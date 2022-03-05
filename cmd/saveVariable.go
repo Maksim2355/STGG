@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"stgg/cmd/output"
+	"stgg/cmd/printer"
 )
 
 var saveVariableCmd = &cobra.Command{
@@ -20,7 +20,7 @@ var saveVariableCmd = &cobra.Command{
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 2 {
-			output.PrintErrorAndExit("Число аргументов должно быть равным двум")
+			printer.PrintErrorAndExit("Число аргументов должно быть равным двум")
 		}
 	},
 }

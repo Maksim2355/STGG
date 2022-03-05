@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"stgg/cmd/output"
+	"stgg/cmd/printer"
 
 	"github.com/spf13/cobra"
 )
@@ -34,7 +34,7 @@ var generateCmd = &cobra.Command{
 	В случае если переменная содержащаяся в аргументах уже сохранена ранее с помошью командой saveVariable, то она будет переопределена
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		output.PrintErrorAndExit("Старт генерации")
+		printer.PrintErrorAndExit("Старт генерации")
 	},
 }
 

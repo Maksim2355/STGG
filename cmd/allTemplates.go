@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	"stgg/cmd/output"
+	"stgg/cmd/printer"
 
 	"github.com/spf13/cobra"
 )
@@ -12,7 +12,7 @@ var allTemplatesCmd = &cobra.Command{
 	Short: "Показать все доступные шаблоны",
 	Long:  `Показывает все доступные шаблоны ранее сохраненные командой saveTemplate`,
 	Run: func(cmd *cobra.Command, args []string) {
-		output.PrintErrorAndExit("Доступные шаблоны для генерации файлов:")
+		printer.PrintErrorAndExit("Доступные шаблоны для генерации файлов:")
 	},
 }
 

@@ -2,7 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"stgg/cmd/output"
+	"stgg/cmd/printer"
 )
 
 var saveTemplateCmd = &cobra.Command{
@@ -17,7 +17,7 @@ var saveTemplateCmd = &cobra.Command{
 	В случае если аргумент не один-выкидывает ошибку`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
-			output.PrintErrorAndExit("Необходим один единственный аргумент-путь до шаблона, который необходимо сохранить")
+			printer.PrintErrorAndExit("Необходим один единственный аргумент-путь до шаблона, который необходимо сохранить")
 		}
 	},
 }
