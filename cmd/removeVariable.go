@@ -1,11 +1,8 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"stgg/cmd/output"
 )
 
 // removeVariableCmd represents the removeVariable command
@@ -21,7 +18,7 @@ var removeVariableCmd = &cobra.Command{
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
-			printErrorAndStopProgramm("Необходим один аргумент-имя шаблона")
+			output.PrintErrorAndExit("Необходим один аргумент-имя шаблона")
 		}
 		//TODO удаление шаблона
 	},

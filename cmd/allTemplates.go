@@ -1,11 +1,7 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
-	"fmt"
+	"stgg/cmd/output"
 
 	"github.com/spf13/cobra"
 )
@@ -16,7 +12,7 @@ var allTemplatesCmd = &cobra.Command{
 	Short: "Показать все доступные шаблоны",
 	Long:  `Показывает все доступные шаблоны ранее сохраненные командой saveTemplate`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Доступные шаблоны для генерации файлов:")
+		output.PrintErrorAndExit("Доступные шаблоны для генерации файлов:")
 	},
 }
 

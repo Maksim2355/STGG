@@ -1,11 +1,8 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
 	"fmt"
+	"stgg/cmd/output"
 
 	"github.com/spf13/cobra"
 )
@@ -23,7 +20,7 @@ var editTemplateCmd = &cobra.Command{
 	В случае если количество аргументов больше или меньше одного, то программа завершается с ошибкой`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
-			printErrorAndStopProgramm("Аргумент должен быть один-имя шаблона")
+			output.PrintErrorAndExit("Аргумент должен быть один-имя шаблона")
 		}
 		fmt.Println("Открытия конфиг файла")
 	},

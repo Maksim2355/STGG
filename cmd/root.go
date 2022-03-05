@@ -1,11 +1,7 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
-	"os"
+	"stgg/cmd/output"
 
 	"github.com/spf13/cobra"
 )
@@ -22,7 +18,7 @@ var rootCmd = &cobra.Command{
 func Execute() {
 	err := rootCmd.Execute()
 	if err != nil {
-		os.Exit(1)
+		output.PrintErrorAndExit(err.Error())
 	}
 }
 

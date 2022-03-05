@@ -1,11 +1,7 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
-	"fmt"
+	"stgg/cmd/output"
 
 	"github.com/spf13/cobra"
 )
@@ -38,7 +34,7 @@ var generateCmd = &cobra.Command{
 	В случае если переменная содержащаяся в аргументах уже сохранена ранее с помошью командой saveVariable, то она будет переопределена
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("Старт генерации")
+		output.PrintErrorAndExit("Старт генерации")
 	},
 }
 

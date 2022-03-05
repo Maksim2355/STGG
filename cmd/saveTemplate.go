@@ -1,14 +1,10 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"stgg/cmd/output"
 )
 
-// saveTemplateCmd represents the saveTemplate command
 var saveTemplateCmd = &cobra.Command{
 	Use:   "saveTemplate",
 	Short: "Сохранение шаблона",
@@ -21,7 +17,7 @@ var saveTemplateCmd = &cobra.Command{
 	В случае если аргумент не один-выкидывает ошибку`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
-			printErrorAndStopProgramm("Необходим один единственный аргумент-путь до шаблона, который необходимо сохранить")
+			output.PrintErrorAndExit("Необходим один единственный аргумент-путь до шаблона, который необходимо сохранить")
 		}
 	},
 }

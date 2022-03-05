@@ -1,14 +1,10 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"stgg/cmd/output"
 )
 
-// saveVariableCmd represents the saveVariable command
 var saveVariableCmd = &cobra.Command{
 	Use:   "saveVariable",
 	Short: "Сохранение переменной для последующей подстановки в шаблоны",
@@ -24,7 +20,7 @@ var saveVariableCmd = &cobra.Command{
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 2 {
-			printErrorAndStopProgramm("Число аргументов должно быть равным двум")
+			output.PrintErrorAndExit("Число аргументов должно быть равным двум")
 		}
 	},
 }

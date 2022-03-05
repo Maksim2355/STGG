@@ -1,11 +1,8 @@
-/*
-Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
-*/
 package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"stgg/cmd/output"
 )
 
 var replaceVariableCmd = &cobra.Command{
@@ -20,7 +17,7 @@ var replaceVariableCmd = &cobra.Command{
 	Если число аргумента больше или меньше двух или переменной нет в списке-выкидывается ошибка`,
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 2 {
-			printErrorAndStopProgramm("Необходимо два аргумента. Название переменной и новое значение")
+			output.PrintErrorAndExit("Необходимо два аргумента. Название переменной и новое значение")
 		}
 	},
 }
