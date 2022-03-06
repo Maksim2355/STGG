@@ -33,6 +33,12 @@ func writeInCsv(filename string, data []string) error {
 
 	lines = append(lines, data)
 
+	for i := 0; i < len(lines); i++ {
+		if lines[i][0] == data[0] {
+			return errors.New("Переменная уже существует")
+		}
+	}
+
 	// write the file
 	file, err := utils.OpenFileForAppend(filename)
 
