@@ -31,7 +31,7 @@ func RemoveVariable(variableName string) error {
 		}
 	}
 
-	if indexRemovedItem != -1 {
+	if indexRemovedItem == -1 {
 		return errors.New("переменной не существует")
 	} else {
 		variablesData := utils.RemoveFromStringMatrixWithSaveOrder(allVariables, indexRemovedItem)
@@ -45,6 +45,19 @@ func RemoveVariable(variableName string) error {
 	return nil
 }
 
+// ReplaceVariable Замена выбранной переменной на новую
+func ReplaceVariable(newVariableName, newVariableValue string) error {
+	err := RemoveVariable(newVariableValue)
+	if err != nil {
+		return err
+	}
+	return SaveVariable(newVariableName, newVariableValue)
+}
+
 func GetValue(variable string) (string, error) {
-	return findBy(variable)
+	return findBy(variableStorageFilename, variable)
+}
+
+func FindAll(variables []string) (map[string]string, error) {
+	return findByList(variableStorageFilename, variables)
 }

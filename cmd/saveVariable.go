@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"stgg/cmd/printer"
+	"stgg/vrblstorage"
 )
 
 var saveVariableCmd = &cobra.Command{
@@ -21,6 +22,15 @@ var saveVariableCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 2 {
 			printer.PrintErrorAndExit("Число аргументов должно быть равным двум")
+		} else {
+			variable := args[0]
+			value := args[1]
+			err := vrblstorage.SaveVariable(variable, value)
+			if err != nil {
+				printer.PrintErrorAndExit(err.Error())
+			}
+
+			printer.PrintMessage("Переменная сохранена")
 		}
 	},
 }

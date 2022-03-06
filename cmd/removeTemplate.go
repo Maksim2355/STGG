@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"stgg/cmd/printer"
 
 	"github.com/spf13/cobra"
@@ -23,7 +22,6 @@ var removeTemplateCmd = &cobra.Command{
 		if len(args) != 1 {
 			printer.PrintErrorAndExit("Необходим один аргумент-название ранее сохраненного шаблона")
 		}
-		fmt.Println("removeTemplate called")
 	},
 }
 

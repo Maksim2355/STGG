@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"stgg/cmd/printer"
+	"stgg/vrblstorage"
 )
 
 // removeVariableCmd represents the removeVariable command
@@ -19,8 +20,13 @@ var removeVariableCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
 			printer.PrintErrorAndExit("Необходим один аргумент-имя шаблона")
+		} else {
+			variableName := args[0]
+			err := vrblstorage.RemoveVariable(variableName)
+			if err != nil {
+				printer.PrintErrorAndExit(err.Error())
+			}
 		}
-		//TODO удаление шаблона
 	},
 }
 

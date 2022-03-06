@@ -4,13 +4,14 @@ import (
 	"encoding/csv"
 	"errors"
 	"io"
-	"os"
+	"stgg/cmd/printer"
+	"stgg/utils"
 	"unicode/utf8"
 )
 
-//считывает файл с csv
+//Считывает файл с csv
 func readCsvFile(filename string) ([][]string, error) {
-	var file = openFile()
+	var file, err = utils.OpenFileForRead(filename)
 	reader := csv.NewReader(file)
 	records, err := reader.ReadAll()
 	if err != nil {
@@ -20,57 +21,56 @@ func readCsvFile(filename string) ([][]string, error) {
 	return records, file.Close()
 }
 
-//записывает данные в csvFile
+//Добавляет новые данные в файл
 func writeInCsv(filename string, data []string) error {
 	if len(data) != 2 {
 		return errors.New("число данных в строке должно быть равным двум")
 	}
-	// read the file
 	lines, err := readCsvFile(filename)
 	if err != nil {
 		return err
 	}
 
-	// add column
-	l := len(lines)
-	if len(data) < l {
-		l = len(data)
-	}
-	for i := 0; i < l; i++ {
-		lines[i] = append(lines[i], data[i])
-	}
+	lines = append(lines, data)
 
 	// write the file
-	file, err := os.Create(filename)
-	if err != nil {
-		return err
-	}
+	file, err := utils.OpenFileForAppend(filename)
+
 	w := csv.NewWriter(file)
+
 	if err = w.WriteAll(lines); err != nil {
 		file.Close()
 		return err
 	}
+	w.Flush()
+
+	if err := w.Error(); err != nil {
+		printer.PrintError(err.Error())
+	}
 	return file.Close()
 }
 
-//записывает данные в csvFile
+//Перезапизывает данные в файл
 func rewriteInCsv(filename string, data [][]string) error {
-	// write the file
-	file, err := os.Create(filename)
+	file, err := utils.OpenFileForWrite(filename)
 	if err != nil {
 		return err
 	}
 	w := csv.NewWriter(file)
-	if err = w.WriteAll(data); err != nil {
+	if err := w.WriteAll(data); err != nil {
 		file.Close()
 		return err
 	}
+	w.Flush()
 	return file.Close()
 }
 
 //Нахождение значение переменной по ее имени
-func findBy(variable string) (string, error) {
-	var file = openFile()
+func findBy(filename, variable string) (string, error) {
+	var file, err = utils.OpenFileForRead(filename)
+	if err != nil {
+		return "", err
+	}
 	reader := csv.NewReader(file)
 
 	var value string
@@ -92,4 +92,42 @@ func findBy(variable string) (string, error) {
 	}
 
 	return value, nil
+}
+
+//Нахождение значений переменных по ее имени
+func findByList(filename string, variablesList []string) (map[string]string, error) {
+	var file, err = utils.OpenFileForRead(filename)
+	if err != nil {
+		return nil, err
+	}
+	countVariables := len(variablesList)
+	variablesMap := make(map[string]string, countVariables)
+
+	reader := csv.NewReader(file)
+
+	for {
+		if len(variablesMap) >= countVariables {
+			break
+		}
+
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+		if err != nil {
+			return nil, err
+		}
+		currentVariable := record[0]
+		currentValue := record[1]
+
+		for i := 0; i < countVariables; i++ {
+			variables := variablesList[i]
+			if currentVariable == variables {
+				variablesMap[currentVariable] = currentValue
+				break
+			}
+		}
+	}
+
+	return variablesMap, nil
 }

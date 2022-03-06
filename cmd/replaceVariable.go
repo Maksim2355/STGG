@@ -18,6 +18,7 @@ var replaceVariableCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 2 {
 			printer.PrintErrorAndExit("Необходимо два аргумента. Название переменной и новое значение")
+		} else {
 		}
 	},
 }

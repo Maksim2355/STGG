@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"stgg/cmd/printer"
 
 	"github.com/spf13/cobra"
@@ -22,7 +21,6 @@ var editTemplateCmd = &cobra.Command{
 		if len(args) != 1 {
 			printer.PrintErrorAndExit("Аргумент должен быть один-имя шаблона")
 		}
-		fmt.Println("Открытия конфиг файла")
 	},
 }
 
