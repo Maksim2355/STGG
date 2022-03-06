@@ -47,7 +47,7 @@ func RemoveVariable(variableName string) error {
 
 // ReplaceVariable Замена выбранной переменной на новую
 func ReplaceVariable(newVariableName, newVariableValue string) error {
-	err := RemoveVariable(newVariableValue)
+	err := RemoveVariable(newVariableName)
 	if err != nil {
 		return err
 	}
