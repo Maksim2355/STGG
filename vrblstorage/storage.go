@@ -5,28 +5,30 @@ import (
 	"stgg/utils"
 )
 
+type VariableStorage struct{}
+
 //файл в формате csv в котором хранятся переменные
 var variableStorageFilename = "./variables.csv"
 
-// SaveVariable сохранение переменной
-func SaveVariable(variableName, value string) error {
-	return writeInCsv(variableStorageFilename, []string{variableName, value})
+// SaveData сохранение переменной
+func (storage VariableStorage) SaveData(key, value string) error {
+	return utils.WriteInCsv(variableStorageFilename, []string{key, value})
 }
 
-// AllVariable получение списка всех переменных
-func AllVariable() ([][]string, error) {
-	return readCsvFile(variableStorageFilename)
+// AllCsvData получение списка всех переменных
+func (storage VariableStorage) AllCsvData() ([][]string, error) {
+	return utils.ReadCsvFile(variableStorageFilename)
 }
 
-// RemoveVariable удаление переменной из списка
-func RemoveVariable(variableName string) error {
-	allVariables, err := AllVariable()
+// RemoveByKey удаление переменной из списка
+func (storage VariableStorage) RemoveByKey(key string) error {
+	allVariables, err := storage.AllCsvData()
 	if err != nil {
 		return err
 	}
 	var indexRemovedItem = -1
 	for i, item := range allVariables {
-		if item[0] == variableName {
+		if item[0] == key {
 			indexRemovedItem = i
 		}
 	}
@@ -35,7 +37,7 @@ func RemoveVariable(variableName string) error {
 		return errors.New("переменной не существует")
 	} else {
 		variablesData := utils.RemoveFromStringMatrixWithSaveOrder(allVariables, indexRemovedItem)
-		err := rewriteInCsv(variableStorageFilename, variablesData)
+		err := utils.RewriteInCsv(variableStorageFilename, variablesData)
 
 		if err != nil {
 			return err
@@ -45,13 +47,13 @@ func RemoveVariable(variableName string) error {
 	return nil
 }
 
-// ReplaceVariable Замена выбранной переменной на новую
-func ReplaceVariable(newVariableName, newVariableValue string) error {
-	err := RemoveVariable(newVariableName)
+// ReplaceData Замена выбранной переменной на новую
+func (storage VariableStorage) ReplaceData(key, value string) error {
+	err := storage.RemoveByKey(key)
 	if err != nil {
 		return err
 	}
-	return SaveVariable(newVariableName, newVariableValue)
+	return storage.SaveData(key, value)
 }
 
 func GetValue(variable string) (string, error) {

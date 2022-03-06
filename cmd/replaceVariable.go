@@ -20,9 +20,10 @@ var replaceVariableCmd = &cobra.Command{
 		if len(args) != 2 {
 			printer.PrintErrorAndExit("Необходимо два аргумента. Название переменной и новое значение")
 		} else {
+			storage := vrblstorage.VariableStorage{}
 			variableName := args[0]
 			newValue := args[1]
-			err := vrblstorage.ReplaceVariable(variableName, newValue)
+			err := storage.ReplaceData(variableName, newValue)
 			if err != nil {
 				printer.PrintErrorAndExit(err.Error())
 			}

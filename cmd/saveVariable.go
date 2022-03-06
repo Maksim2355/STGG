@@ -23,9 +23,10 @@ var saveVariableCmd = &cobra.Command{
 		if len(args) != 2 {
 			printer.PrintErrorAndExit("Число аргументов должно быть равным двум")
 		} else {
+			storage := vrblstorage.VariableStorage{}
 			variable := args[0]
 			value := args[1]
-			err := vrblstorage.SaveVariable(variable, value)
+			err := storage.SaveData(variable, value)
 			if err != nil {
 				printer.PrintErrorAndExit(err.Error())
 			}
