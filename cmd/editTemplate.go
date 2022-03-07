@@ -22,8 +22,8 @@ var editTemplateCmd = &cobra.Command{
 		if len(args) != 1 {
 			printer.PrintErrorAndExit("Аргумент должен быть один-имя шаблона")
 		}
-		var templateName = args[0]
 		var storage = tmplengine.NewStorage()
+		var templateName = args[0]
 		err := storage.EditTemplate(templateName)
 		if err != nil {
 			printer.PrintErrorAndExit(err.Error())

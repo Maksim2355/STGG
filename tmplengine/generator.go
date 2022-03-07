@@ -3,7 +3,7 @@ package tmplengine
 import "errors"
 
 // GenerateTemplateWithLocalVariables сгенерировать шаблон, взяв переменные из командной строки
-func GenerateTemplateWithLocalVariables(storage TemplateStorage, data *LocalVariables) error {
+func GenerateTemplateWithLocalVariables(storage TemplateStorage, data []*LocalVariables) error {
 	//TODO генерация шаблона
 	return errors.New("")
 }

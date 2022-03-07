@@ -57,11 +57,11 @@ func (storage VariableStorage) ReplaceData(key, value string) error {
 }
 
 func GetValue(variable string) (string, error) {
-	return findBy(variableStorageFilename, variable)
+	return utils.FindByKey(variableStorageFilename, variable)
 }
 
 func FindAll(variables []string) (map[string]string, error) {
-	return findByList(variableStorageFilename, variables)
+	return utils.FindByListKeys(variableStorageFilename, variables)
 }
 
 func NewStorage() *VariableStorage {

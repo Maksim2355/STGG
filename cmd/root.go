@@ -12,7 +12,8 @@ var rootCmd = &cobra.Command{
 	Long: `Шаблонизатор с использованием стандартного языка шаблонов golang
 	
 	Более подробную документацию можно найти в репозитории проекта https://github.com/Maksim2355/STGG`,
-	Run: func(cmd *cobra.Command, args []string) {},
+	Run: func(cmd *cobra.Command, args []string) {
+	},
 }
 
 func Execute() {
