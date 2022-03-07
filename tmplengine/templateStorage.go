@@ -42,3 +42,7 @@ func (storage TemplateStorage) getConfig(templateName string) error {
 
 	return errors.New("")
 }
+
+func NewStorage() *TemplateStorage {
+	return &TemplateStorage{}
+}

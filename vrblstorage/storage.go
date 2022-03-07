@@ -63,3 +63,7 @@ func GetValue(variable string) (string, error) {
 func FindAll(variables []string) (map[string]string, error) {
 	return findByList(variableStorageFilename, variables)
 }
+
+func NewStorage() *VariableStorage {
+	return &VariableStorage{}
+}

@@ -16,7 +16,7 @@ var allTemplatesCmd = &cobra.Command{
 		if len(args) > 0 {
 			printer.PrintWarning("дополнительные аргументы не требуются")
 		}
-		storage := tmplengine.TemplateStorage{}
+		storage := tmplengine.NewStorage()
 		foundation.PrintDataStorage(storage)
 	},
 }

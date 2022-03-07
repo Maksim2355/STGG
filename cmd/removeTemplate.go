@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"stgg/cmd/printer"
+	"stgg/tmplengine"
 
 	"github.com/spf13/cobra"
 )
@@ -21,6 +22,12 @@ var removeTemplateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
 			printer.PrintErrorAndExit("Необходим один аргумент-название ранее сохраненного шаблона")
+		}
+		storage := tmplengine.NewStorage()
+		var templateName = args[0]
+		err := storage.RemoveByKey(templateName)
+		if err != nil {
+			printer.PrintErrorAndExit(err.Error())
 		}
 	},
 }

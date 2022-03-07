@@ -21,7 +21,7 @@ var removeVariableCmd = &cobra.Command{
 		if len(args) != 1 {
 			printer.PrintErrorAndExit("Необходим один аргумент-имя шаблона")
 		} else {
-			storage := vrblstorage.VariableStorage{}
+			storage := vrblstorage.NewStorage()
 			variableName := args[0]
 			err := storage.RemoveByKey(variableName)
 			if err != nil {

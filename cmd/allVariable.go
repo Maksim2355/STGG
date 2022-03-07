@@ -15,7 +15,7 @@ var allVariableCmd = &cobra.Command{
 		if len(args) > 0 {
 			printer.PrintWarning("дополнительные аргументы не требуются")
 		}
-		storage := vrblstorage.VariableStorage{}
+		storage := vrblstorage.NewStorage()
 		foundation.PrintDataStorage(storage)
 	},
 }

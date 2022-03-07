@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"stgg/cmd/printer"
+	"stgg/tmplengine"
 
 	"github.com/spf13/cobra"
 )
@@ -20,6 +21,12 @@ var editTemplateCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) != 1 {
 			printer.PrintErrorAndExit("Аргумент должен быть один-имя шаблона")
+		}
+		var templateName = args[0]
+		var storage = tmplengine.NewStorage()
+		err := storage.EditTemplate(templateName)
+		if err != nil {
+			printer.PrintErrorAndExit(err.Error())
 		}
 	},
 }
