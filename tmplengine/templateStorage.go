@@ -2,57 +2,76 @@ package tmplengine
 
 import (
 	"errors"
+	"io/ioutil"
+	"os"
 	"stgg/utils"
 )
 
-type TemplateStorage struct{}
+const TemplatesDir = "./templates/"
 
-var templatesDir = "./templates/"
+// AllTemplates Отдает список сохраненных шаблонов
+func AllTemplates() ([]string, error) {
+	dir, err := ioutil.ReadDir(TemplatesDir)
+	if err != nil && os.IsNotExist(err) {
+		if os.IsNotExist(err) {
+			return make([]string, 0), nil
+		}
+		return nil, errors.New("ошибка при чтенции директории с шаблонами")
+	}
+	templatesInfo := make([]string, 10)
 
-var fileWithTemplatesInfo = "./templateInfo.csv"
+	for i, f := range dir {
+		if f.IsDir() {
+			templatesInfo[i] = f.Name()
+		}
+	}
 
-// AllCsvData Отдает список сохраненных шаблонов и путь к ним
-func (storage TemplateStorage) AllCsvData() ([][]string, error) {
-	return utils.ReadCsvFile(fileWithTemplatesInfo)
+	return templatesInfo, nil
 }
 
 // SaveData Сохраняет выбранный шаблон под именем key. Значение value является путем к каталогу с шаблонами
-func (storage TemplateStorage) SaveData(key, value string) error {
-	newTemplateDir := templatesDir + key
-	templateNameInStorage, _ := utils.FindByKey(fileWithTemplatesInfo, key)
-	if templateNameInStorage != "" {
-		return errors.New("шаблон с текущем именем уже есть")
+func SaveData(templateName, srcTemplatePath string) error {
+	var allTemplates, err = AllTemplates()
+
+	if err != nil {
+		return err
 	}
 
-	err := utils.CopyDir(value, templatesDir+key)
+	for _, tmpl := range allTemplates {
+		if tmpl == templateName {
+			return errors.New("шаблон уже существует")
+		}
+	}
+
+	var newTemplateDir = TemplatesDir + templateName
+
+	err = utils.CopyDir(srcTemplatePath, newTemplateDir)
 	if err != nil {
 		return errors.New("ошибка при сохранении шаблона " + err.Error())
 	}
-
-	return utils.WriteInCsv(fileWithTemplatesInfo, []string{key, newTemplateDir})
+	return nil
 }
 
-// RemoveByKey удаляет выбранный шаблон из хранилища. ключом является названием шаблона
-func (storage TemplateStorage) RemoveByKey(key string) error {
-	return errors.New("")
-}
+// RemoveTemplate RemoveByKey удаляет выбранный шаблон из хранилища. ключом является названием шаблона
+func RemoveTemplate(templateName string) error {
+	var allTemplates, err = AllTemplates()
+	if err != nil {
+		return err
+	}
 
-// ReplaceData заменяет выбранный шаблон новым шаблном
-func (storage TemplateStorage) ReplaceData(key, value string) error {
-	return errors.New("")
-}
+	var hasBeenRemoved bool
 
-// EditTemplate Открывает конфиг для выбраного шаблна
-func (storage TemplateStorage) EditTemplate(templateName string) error {
-
-	return errors.New("")
-}
-
-func (storage TemplateStorage) getConfig(templateName string) error {
-
-	return errors.New("")
-}
-
-func NewStorage() *TemplateStorage {
-	return &TemplateStorage{}
+	for _, tmpl := range allTemplates {
+		if tmpl == templateName {
+			err = utils.RemoveContents(TemplatesDir + templateName)
+			if err != nil {
+				return errors.New("ошибка при удалении шаблона")
+			}
+			hasBeenRemoved = true
+		}
+	}
+	if !hasBeenRemoved {
+		return errors.New("шаблон не найден")
+	}
+	return nil
 }

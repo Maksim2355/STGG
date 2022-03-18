@@ -6,7 +6,7 @@ import (
 
 type BaseCsvStorage interface {
 	AllCsvData() ([][]string, error)
-	RemoveByKey(key string) error
+	RemoveTemplate(key string) error
 	SaveData(key, value string) error
 	ReplaceData(key, value string) error
 }

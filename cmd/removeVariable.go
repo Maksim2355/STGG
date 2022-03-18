@@ -23,7 +23,7 @@ var removeVariableCmd = &cobra.Command{
 		} else {
 			storage := vrblstorage.NewStorage()
 			variableName := args[0]
-			err := storage.RemoveByKey(variableName)
+			err := storage.RemoveTemplate(variableName)
 			if err != nil {
 				printer.PrintErrorAndExit(err.Error())
 			}

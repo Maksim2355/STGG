@@ -23,9 +23,8 @@ var removeTemplateCmd = &cobra.Command{
 		if len(args) != 1 {
 			printer.PrintErrorAndExit("Необходим один аргумент-название ранее сохраненного шаблона")
 		}
-		storage := tmplengine.NewStorage()
-		var templateName = args[0]
-		err := storage.RemoveByKey(templateName)
+		var tmplName = args[0]
+		err := tmplengine.RemoveTemplate(tmplName)
 		if err != nil {
 			printer.PrintErrorAndExit(err.Error())
 		}

@@ -21,7 +21,7 @@ func (storage VariableStorage) AllCsvData() ([][]string, error) {
 }
 
 // RemoveByKey удаление переменной из списка
-func (storage VariableStorage) RemoveByKey(key string) error {
+func (storage VariableStorage) RemoveTemplate(key string) error {
 	allVariables, err := storage.AllCsvData()
 	if err != nil {
 		return err
@@ -49,7 +49,7 @@ func (storage VariableStorage) RemoveByKey(key string) error {
 
 // ReplaceData Замена выбранной переменной на новую
 func (storage VariableStorage) ReplaceData(key, value string) error {
-	err := storage.RemoveByKey(key)
+	err := storage.RemoveTemplate(key)
 	if err != nil {
 		return err
 	}
