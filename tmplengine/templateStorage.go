@@ -18,7 +18,7 @@ func AllTemplates() ([]string, error) {
 		}
 		return nil, errors.New("ошибка при чтенции директории с шаблонами")
 	}
-	templatesInfo := make([]string, 10)
+	templatesInfo := make([]string, 0)
 
 	for i, f := range dir {
 		if f.IsDir() {

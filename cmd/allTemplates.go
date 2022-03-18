@@ -20,9 +20,13 @@ var allTemplatesCmd = &cobra.Command{
 		if err != nil {
 			printer.PrintErrorAndExit(err.Error())
 		}
-		printer.PrintMessage("Список шаблонов, находящихся в " + tmplengine.TemplatesDir)
-		for _, tmpl := range allTemplates {
-			printer.PrintMessage(tmpl)
+		if len(allTemplates) == 0 {
+			printer.PrintMessage("Нет доступных шаблонов")
+		} else {
+			printer.PrintMessage("Список шаблонов, находящихся в " + tmplengine.TemplatesDir)
+			for _, tmpl := range allTemplates {
+				printer.PrintMessage(tmpl)
+			}
 		}
 	},
 }
