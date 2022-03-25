@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"io/ioutil"
 	"os"
 	"path/filepath"
 )
@@ -17,6 +18,16 @@ func OpenFileForWrite(filepath string) (*os.File, error) {
 	return os.OpenFile(filepath, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, 0644)
 }
 
+// ReadFile Читает содержимое файла или возвращает ошибку
+func ReadFile(path string) ([]byte, error) {
+	var data, err = ioutil.ReadFile(path)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+// RemoveContents Удаление выбранной директории и всех файлов внутри
 func RemoveContents(dir string) error {
 	d, err := os.Open(dir)
 	if err != nil {

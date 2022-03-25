@@ -9,10 +9,12 @@ import (
 
 const TemplatesDir = "./templates/"
 
+const GlobalVariablesPath = "./globalVariables.yaml"
+
 // AllTemplates Отдает список сохраненных шаблонов
 func AllTemplates() ([]string, error) {
 	dir, err := ioutil.ReadDir(TemplatesDir)
-	if err != nil && os.IsNotExist(err) {
+	if err != nil || os.IsNotExist(err) {
 		if os.IsNotExist(err) {
 			return make([]string, 0), nil
 		}
@@ -20,17 +22,17 @@ func AllTemplates() ([]string, error) {
 	}
 	templatesInfo := make([]string, 0)
 
-	for i, f := range dir {
-		if f.IsDir() {
-			templatesInfo[i] = f.Name()
+	for index, file := range dir {
+		if file.IsDir() {
+			templatesInfo[index] = file.Name()
 		}
 	}
 
 	return templatesInfo, nil
 }
 
-// SaveData Сохраняет выбранный шаблон под именем key. Значение value является путем к каталогу с шаблонами
-func SaveData(templateName, srcTemplatePath string) error {
+// SaveTemplate Сохраняет выбранный шаблон под именем templateName. Значение srcTemplatePath является путем к каталогу с шаблонами
+func SaveTemplate(templateName, srcTemplatePath string) error {
 	var allTemplates, err = AllTemplates()
 
 	if err != nil {

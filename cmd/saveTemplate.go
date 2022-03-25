@@ -23,7 +23,7 @@ var saveTemplateCmd = &cobra.Command{
 			printer.PrintErrorAndExit("Необходимо 2 аргумента: имя шаблона и путь до папки с шаблонами")
 		}
 		var templateName, templatePath = args[0], args[1]
-		err := tmplengine.SaveData(templateName, templatePath)
+		err := tmplengine.SaveTemplate(templateName, templatePath)
 		if err != nil {
 			printer.PrintErrorAndExit(err.Error())
 		}
