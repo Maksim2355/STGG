@@ -2,7 +2,10 @@ package tmplengine
 
 import (
 	"errors"
+	"io/fs"
 	"os"
+	"path/filepath"
+	"stgg/cmd/printer"
 	"stgg/utils"
 	"stgg/yamlstgg"
 )
@@ -34,7 +37,35 @@ func GenerateTemplate(templateName string, variableData map[interface{}]interfac
 	if err != nil && !os.IsNotExist(err) {
 		return err
 	}
-	var _ = utils.MergeMaps(globalVariables, variableData)
+	var variables = utils.MergeMaps(globalVariables, variableData)
 
-	return errors.New("")
+	var templatePath = TemplatesDir + templateName
+	return filepath.Walk(templatePath, func(path string, info fs.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if info.IsDir() {
+			var newPathDir, err = utils.ReplaceBefore(path, "", "/")
+			if err != nil {
+				return errors.New("указан неккоректный путь до файла")
+			}
+			err = os.Mkdir(newPathDir, 0777)
+			if err != nil {
+				return err
+			}
+		}
+		go func() {
+			err := generateTemplateFile(path, info, err, variables)
+			if err != nil {
+				printer.PrintError("ошибка генерации " + path)
+			}
+		}()
+
+		return nil
+	})
+}
+
+func generateTemplateFile(path string, info os.FileInfo, err error, variables map[interface{}]interface{}) error {
+
+	return nil
 }
