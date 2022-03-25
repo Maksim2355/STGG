@@ -8,8 +8,8 @@ func GenerateTemplateWithLocalVariables() error {
 	return errors.New("")
 }
 
-// GenerateTemplateWithJson Сгенерировать выбранный шаблон, взяв переменные из json
-func GenerateTemplateWithJson() error {
+// GenerateTemplateWithYaml Сгенерировать выбранный шаблон, взяв переменные из yaml файла
+func GenerateTemplateWithYaml() error {
 	//TODO генерация шаблона
 	return errors.New("")
 }
