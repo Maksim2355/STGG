@@ -1,18 +1,16 @@
 package tmplengine
 
 import (
-	"errors"
 	"io/fs"
 	"os"
 	"path/filepath"
 	"stgg/cmd/printer"
+	"stgg/crossplatform"
 	"stgg/utils"
 	"stgg/yamlstgg"
-	"sync"
+	"strings"
 	"text/template"
 )
-
-const PathGenerated = "./"
 
 // GenerateTemplateWithLocalVariables сгенерировать шаблон, взяв переменные из командной строки или переменных из конфига
 func GenerateTemplateWithLocalVariables(templateName string, localVariables []string) error {
@@ -39,49 +37,43 @@ func GenerateTemplate(templateName string, variableData map[interface{}]interfac
 	if err != nil && !os.IsNotExist(err) {
 		return err
 	}
-	var variables = utils.MergeMaps(globalVariables, variableData)
-
-	var templatePath = TemplatesDir + templateName
-
-	var countDirsAndFiles, er = utils.CountDirsAndFiles(templatePath)
-	if er != nil {
-		return er
+	var variables map[interface{}]interface{}
+	if os.IsNotExist(err) {
+		variables = variableData
+	} else {
+		variables = utils.MergeMaps(globalVariables, variableData)
 	}
-	var wg = new(sync.WaitGroup)
-	wg.Add(countDirsAndFiles)
+
+	var templatePath = TemplatesPath + crossplatform.PATH_SEPARATOR + templateName
 
 	err = filepath.Walk(templatePath, func(path string, info fs.FileInfo, err error) error {
+		if path == templatePath {
+			return nil
+		}
 		if err != nil {
-			wg.Done()
 			return err
 		}
 		if info.IsDir() {
-			var newPathDir, err = utils.ReplaceBefore(path, "", "/")
-			if err != nil {
-				return errors.New("указан неккоректный путь до файла")
-			}
+			var newPathDir = strings.Replace(path, TemplateDirName+crossplatform.PATH_SEPARATOR+templateName, PathGenerated, -1)
 			err = os.Mkdir(newPathDir, 0777)
-			if err != nil {
-				return err
+			if err != nil && !os.IsNotExist(err) {
+				printer.PrintMessage(err.Error())
 			}
-			wg.Done()
-		}
-		go func() {
-			newPathFile, err := utils.ReplaceBefore(path, "", "/")
-			err = generateTemplateFile(path, PathGenerated+newPathFile, variables)
+		} else {
+			newPathFile := strings.Replace(path, TemplateDirName+crossplatform.PATH_SEPARATOR+templateName, PathGenerated, -1)
+			printer.PrintMessage("Генерация нового файла с путем " + newPathFile)
+			err = generateTemplateFile(path, newPathFile, variables)
 			if err != nil {
 				printer.PrintError("ошибка генерации " + path)
 			}
-			wg.Done()
-		}()
-
+		}
 		return nil
 	})
-	wg.Wait()
 	return err
 }
 
 func generateTemplateFile(path, newPath string, variables map[interface{}]interface{}) error {
+	println("Генерация непосредственно файла path=", path, " newPath=", newPath)
 	fileBytes, err := utils.ReadFile(path)
 	if err != nil {
 		return err

@@ -4,16 +4,13 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
+	"stgg/crossplatform"
 	"stgg/utils"
 )
 
-const TemplatesDir = "./templates/"
-
-const GlobalVariablesPath = "./globalVariables.yaml"
-
 // AllTemplates Отдает список сохраненных шаблонов
 func AllTemplates() ([]string, error) {
-	dir, err := ioutil.ReadDir(TemplatesDir)
+	dir, err := ioutil.ReadDir(TemplatesPath)
 	if err != nil || os.IsNotExist(err) {
 		if os.IsNotExist(err) {
 			return make([]string, 0), nil
@@ -22,9 +19,9 @@ func AllTemplates() ([]string, error) {
 	}
 	templatesInfo := make([]string, 0)
 
-	for index, file := range dir {
+	for _, file := range dir {
 		if file.IsDir() {
-			templatesInfo[index] = file.Name()
+			templatesInfo = append(templatesInfo, file.Name())
 		}
 	}
 
@@ -45,7 +42,7 @@ func SaveTemplate(templateName, srcTemplatePath string) error {
 		}
 	}
 
-	var newTemplateDir = TemplatesDir + templateName
+	var newTemplateDir = TemplatesPath + crossplatform.PATH_SEPARATOR + templateName
 
 	err = utils.CopyDir(srcTemplatePath, newTemplateDir)
 	if err != nil {
@@ -65,7 +62,7 @@ func RemoveTemplate(templateName string) error {
 
 	for _, tmpl := range allTemplates {
 		if tmpl == templateName {
-			err = utils.RemoveContents(TemplatesDir + templateName)
+			err = utils.RemoveContents(TemplatesPath + crossplatform.PATH_SEPARATOR + templateName)
 			if err != nil {
 				return errors.New("ошибка при удалении шаблона")
 			}

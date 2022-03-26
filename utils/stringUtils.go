@@ -11,5 +11,5 @@ func ReplaceBefore(data, replacingData, separator string) (string, error) {
 	if indexSeparator == -1 {
 		return "", errors.New("Не найден разделитель в строке: " + separator)
 	}
-	return strings.Replace(data, data[0:indexSeparator], replacingData, -1), nil
+	return strings.Replace(data, data[0:indexSeparator+1], replacingData, -1), nil
 }

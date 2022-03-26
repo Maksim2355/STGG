@@ -38,12 +38,12 @@ var generateCmd = &cobra.Command{
 		if len(args) < 1 {
 			printer.PrintErrorAndExit("количестчво аргументов не может быть меньше двух")
 		}
-		printer.PrintErrorAndExit("Старт генерации")
+		printer.PrintMessage("Старт генерации")
 
 		shouldGetVariablesFromPath, _ := cmd.Flags().GetBool("path")
 
 		var templateName = args[0]
-		if shouldGetVariablesFromPath {
+		if !shouldGetVariablesFromPath {
 			var localVariables = args[1:]
 			if len(localVariables)%2 != 0 {
 				printer.PrintErrorAndExit("каждой переменной необходимо проставить значение")
@@ -53,7 +53,7 @@ var generateCmd = &cobra.Command{
 				printer.PrintErrorAndExit(err.Error())
 			}
 		} else {
-			var ymlPath = args[2]
+			var ymlPath = args[1]
 			err := tmplengine.GenerateTemplateWithYaml(templateName, ymlPath)
 			if err != nil {
 				printer.PrintErrorAndExit(err.Error())
@@ -65,7 +65,7 @@ var generateCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(generateCmd)
 
-	generateCmd.Flags().BoolP("path", "pth", false, "Взять переменные с конфиг файла yaml")
+	generateCmd.Flags().BoolP("path", "p", false, "Взять переменные с конфиг файла yaml")
 
 	// Here you will define your flags and configuration settings.
 
