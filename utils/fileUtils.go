@@ -46,3 +46,11 @@ func RemoveContents(dir string) error {
 	}
 	return nil
 }
+
+func CountDirsAndFiles(dirPath string) (int, error) {
+	files, err := os.ReadDir(dirPath)
+	if err != nil {
+		return -1, err
+	}
+	return len(files), nil
+}

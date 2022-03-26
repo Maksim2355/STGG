@@ -8,6 +8,8 @@ import (
 	"stgg/cmd/printer"
 	"stgg/utils"
 	"stgg/yamlstgg"
+	"sync"
+	"text/template"
 )
 
 const PathGenerated = "./"
@@ -40,8 +42,17 @@ func GenerateTemplate(templateName string, variableData map[interface{}]interfac
 	var variables = utils.MergeMaps(globalVariables, variableData)
 
 	var templatePath = TemplatesDir + templateName
-	return filepath.Walk(templatePath, func(path string, info fs.FileInfo, err error) error {
+
+	var countDirsAndFiles, er = utils.CountDirsAndFiles(templatePath)
+	if er != nil {
+		return er
+	}
+	var wg = new(sync.WaitGroup)
+	wg.Add(countDirsAndFiles)
+
+	err = filepath.Walk(templatePath, func(path string, info fs.FileInfo, err error) error {
 		if err != nil {
+			wg.Done()
 			return err
 		}
 		if info.IsDir() {
@@ -53,19 +64,35 @@ func GenerateTemplate(templateName string, variableData map[interface{}]interfac
 			if err != nil {
 				return err
 			}
+			wg.Done()
 		}
 		go func() {
-			err := generateTemplateFile(path, info, err, variables)
+			newPathFile, err := utils.ReplaceBefore(path, "", "/")
+			err = generateTemplateFile(path, PathGenerated+newPathFile, variables)
 			if err != nil {
 				printer.PrintError("ошибка генерации " + path)
 			}
+			wg.Done()
 		}()
 
 		return nil
 	})
+	wg.Wait()
+	return err
 }
 
-func generateTemplateFile(path string, info os.FileInfo, err error, variables map[interface{}]interface{}) error {
-
-	return nil
+func generateTemplateFile(path, newPath string, variables map[interface{}]interface{}) error {
+	fileBytes, err := utils.ReadFile(path)
+	if err != nil {
+		return err
+	}
+	tmpl, err := template.New(path).Parse(string(fileBytes))
+	if err != nil {
+		return err
+	}
+	fileForWrite, err := utils.OpenFileForWrite(newPath)
+	if err != nil {
+		return err
+	}
+	return tmpl.Execute(fileForWrite, variables)
 }
