@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"stgg/cmd/printer"
+	"stgg/tmplengine"
 
 	"github.com/spf13/cobra"
 )
@@ -34,12 +35,37 @@ var generateCmd = &cobra.Command{
 	В случае если переменная содержащаяся в аргументах уже сохранена ранее с помошью командой saveVariable, то она будет переопределена
 	`,
 	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) < 1 {
+			printer.PrintErrorAndExit("количестчво аргументов не может быть меньше двух")
+		}
 		printer.PrintErrorAndExit("Старт генерации")
+
+		shouldGetVariablesFromPath, _ := cmd.Flags().GetBool("path")
+
+		var templateName = args[0]
+		if shouldGetVariablesFromPath {
+			var localVariables = args[1:]
+			if len(localVariables)%2 != 0 {
+				printer.PrintErrorAndExit("каждой переменной необходимо проставить значение")
+			}
+			err := tmplengine.GenerateTemplateWithLocalVariables(templateName, localVariables)
+			if err != nil {
+				printer.PrintErrorAndExit(err.Error())
+			}
+		} else {
+			var ymlPath = args[2]
+			err := tmplengine.GenerateTemplateWithYaml(templateName, ymlPath)
+			if err != nil {
+				printer.PrintErrorAndExit(err.Error())
+			}
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(generateCmd)
+
+	generateCmd.Flags().BoolP("path", "pth", false, "Взять переменные с конфиг файла yaml")
 
 	// Here you will define your flags and configuration settings.
 
