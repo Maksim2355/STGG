@@ -63,6 +63,9 @@ func initConfig() {
 			printer.PrintError("Файл с конфигурацией существует, но появилась ошибка при чтении: " + err.Error())
 		}
 	}
-
+	globalVariablesPath := res.GetGlobalVariablesPath()
+	if _, err := os.Stat(globalVariablesPath); errors.Is(err, os.ErrNotExist) {
+		os.Create(globalVariablesPath)
+	}
 	viper.AutomaticEnv()
 }

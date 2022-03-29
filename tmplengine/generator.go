@@ -76,7 +76,7 @@ func GenerateTemplate(templateName string, variableData map[interface{}]interfac
 			printer.PrintInfoMessage("Генерация нового файла с путем " + newPathFile)
 			err = generateTemplateFile(path, newPathFile, variables)
 			if err != nil {
-				printer.PrintError("ошибка генерации " + path)
+				printer.PrintError("ошибка генерации " + err.Error())
 			}
 		}
 		return nil
