@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"stgg/cmd/printer"
 	"stgg/crossplatform"
+	"stgg/res"
 	"stgg/utils"
 	"stgg/yamlstgg"
 	"strings"
@@ -33,7 +34,7 @@ func GenerateTemplateWithYaml(templateName string, yamlPath string) error {
 }
 
 func GenerateTemplate(templateName string, variableData map[interface{}]interface{}) error {
-	var globalVariables, err = yamlstgg.ReadYamlFile(GlobalVariablesPath)
+	var globalVariables, err = yamlstgg.ReadYamlFile(res.GetGlobalVariablesPath())
 	if err != nil && !os.IsNotExist(err) {
 		return err
 	}
@@ -44,7 +45,8 @@ func GenerateTemplate(templateName string, variableData map[interface{}]interfac
 		variables = utils.MergeMaps(globalVariables, variableData)
 	}
 
-	var templatePath = TemplatesPath + crossplatform.PATH_SEPARATOR + templateName
+	var templatesDirPath = res.GetTemplatesDirPath()
+	var templatePath = templatesDirPath + crossplatform.PATH_SEPARATOR + templateName
 
 	err = filepath.Walk(templatePath, func(path string, info fs.FileInfo, err error) error {
 		if path == templatePath {
@@ -54,14 +56,24 @@ func GenerateTemplate(templateName string, variableData map[interface{}]interfac
 			return err
 		}
 		if info.IsDir() {
-			var newPathDir = strings.Replace(path, TemplateDirName+crossplatform.PATH_SEPARATOR+templateName, PathGenerated, -1)
+			var newPathDir = strings.Replace(
+				path,
+				templatesDirPath+crossplatform.PATH_SEPARATOR+templateName,
+				res.GeneratedFilesDirPath,
+				-1,
+			)
 			err = os.Mkdir(newPathDir, 0777)
 			if err != nil && !os.IsNotExist(err) {
-				printer.PrintMessage(err.Error())
+				printer.PrintInfoMessage(err.Error())
 			}
 		} else {
-			newPathFile := strings.Replace(path, TemplateDirName+crossplatform.PATH_SEPARATOR+templateName, PathGenerated, -1)
-			printer.PrintMessage("Генерация нового файла с путем " + newPathFile)
+			newPathFile := strings.Replace(
+				path,
+				res.GetTemplatesDirPath()+crossplatform.PATH_SEPARATOR+templateName,
+				res.GeneratedFilesDirPath,
+				-1,
+			)
+			printer.PrintInfoMessage("Генерация нового файла с путем " + newPathFile)
 			err = generateTemplateFile(path, newPathFile, variables)
 			if err != nil {
 				printer.PrintError("ошибка генерации " + path)
@@ -73,7 +85,6 @@ func GenerateTemplate(templateName string, variableData map[interface{}]interfac
 }
 
 func generateTemplateFile(path, newPath string, variables map[interface{}]interface{}) error {
-	println("Генерация непосредственно файла path=", path, " newPath=", newPath)
 	fileBytes, err := utils.ReadFile(path)
 	if err != nil {
 		return err

@@ -27,7 +27,7 @@ var saveTemplateCmd = &cobra.Command{
 		if err != nil {
 			printer.PrintErrorAndExit(err.Error())
 		}
-		printer.PrintMessage("Шаблон успешно сохранен")
+		printer.PrintSuccessMessage("Шаблон успешно сохранен")
 	},
 }
 

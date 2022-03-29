@@ -38,12 +38,13 @@ var generateCmd = &cobra.Command{
 		if len(args) < 1 {
 			printer.PrintErrorAndExit("количестчво аргументов не может быть меньше двух")
 		}
-		printer.PrintMessage("Старт генерации")
+		printer.PrintSuccessMessage("Старт генерации")
 
 		shouldGetVariablesFromPath, _ := cmd.Flags().GetBool("path")
 
 		var templateName = args[0]
 		if !shouldGetVariablesFromPath {
+			printer.PrintInfoMessage("Генерация шаблона с локальными переменными")
 			var localVariables = args[1:]
 			if len(localVariables)%2 != 0 {
 				printer.PrintErrorAndExit("каждой переменной необходимо проставить значение")
@@ -53,6 +54,7 @@ var generateCmd = &cobra.Command{
 				printer.PrintErrorAndExit(err.Error())
 			}
 		} else {
+			printer.PrintInfoMessage("Генерация шаблона с переменными из конфиг-файла")
 			var ymlPath = args[1]
 			err := tmplengine.GenerateTemplateWithYaml(templateName, ymlPath)
 			if err != nil {
@@ -66,14 +68,4 @@ func init() {
 	rootCmd.AddCommand(generateCmd)
 
 	generateCmd.Flags().BoolP("path", "p", false, "Взять переменные с конфиг файла yaml")
-
-	// Here you will define your flags and configuration settings.
-
-	// Cobra supports Persistent Flags which will work for this command
-	// and all subcommands, e.g.:
-	// generateCmd.PersistentFlags().String("foo", "", "A help for foo")
-
-	// Cobra supports local flags which will only run when this command
-	// is called directly, e.g.:
-	// generateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }

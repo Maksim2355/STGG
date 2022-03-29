@@ -28,6 +28,7 @@ var removeTemplateCmd = &cobra.Command{
 		if err != nil {
 			printer.PrintErrorAndExit(err.Error())
 		}
+		printer.PrintSuccessMessage("Шаблон " + tmplName + " успешно удален")
 	},
 }
 

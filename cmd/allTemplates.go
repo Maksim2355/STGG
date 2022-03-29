@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"stgg/cmd/printer"
+	"stgg/res"
 	"stgg/tmplengine"
 )
 
@@ -21,11 +22,11 @@ var allTemplatesCmd = &cobra.Command{
 			printer.PrintErrorAndExit(err.Error())
 		}
 		if len(allTemplates) == 0 {
-			printer.PrintMessage("Нет доступных шаблонов")
+			printer.PrintInfoMessage("Нет доступных шаблонов")
 		} else {
-			printer.PrintMessage("Список шаблонов, находящихся в " + tmplengine.TemplatesPath)
+			printer.PrintInfoMessage("Список шаблонов, находящихся в " + res.GetTemplatesDirPath())
 			for _, tmpl := range allTemplates {
-				printer.PrintMessage(tmpl)
+				printer.PrintMessageForList(tmpl)
 			}
 		}
 	},

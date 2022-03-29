@@ -5,12 +5,13 @@ import (
 	"io/ioutil"
 	"os"
 	"stgg/crossplatform"
+	"stgg/res"
 	"stgg/utils"
 )
 
 // AllTemplates Отдает список сохраненных шаблонов
 func AllTemplates() ([]string, error) {
-	dir, err := ioutil.ReadDir(TemplatesPath)
+	dir, err := ioutil.ReadDir(res.GetTemplatesDirPath())
 	if err != nil || os.IsNotExist(err) {
 		if os.IsNotExist(err) {
 			return make([]string, 0), nil
@@ -42,7 +43,7 @@ func SaveTemplate(templateName, srcTemplatePath string) error {
 		}
 	}
 
-	var newTemplateDir = TemplatesPath + crossplatform.PATH_SEPARATOR + templateName
+	var newTemplateDir = res.GetTemplatesDirPath() + crossplatform.PATH_SEPARATOR + templateName
 
 	err = utils.CopyDir(srcTemplatePath, newTemplateDir)
 	if err != nil {
@@ -62,7 +63,7 @@ func RemoveTemplate(templateName string) error {
 
 	for _, tmpl := range allTemplates {
 		if tmpl == templateName {
-			err = utils.RemoveContents(TemplatesPath + crossplatform.PATH_SEPARATOR + templateName)
+			err = utils.RemoveContents(res.GetTemplatesDirPath() + crossplatform.PATH_SEPARATOR + templateName)
 			if err != nil {
 				return errors.New("ошибка при удалении шаблона")
 			}
