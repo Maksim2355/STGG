@@ -39,7 +39,7 @@ func SaveTemplate(templateName, srcTemplatePath string) error {
 
 	for _, tmpl := range allTemplates {
 		if tmpl == templateName {
-			return errors.New("шаблон уже существует")
+			return errors.New("шаблон уже существует с таким именем уже существует")
 		}
 	}
 

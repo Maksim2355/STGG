@@ -16,8 +16,7 @@ const globalVariablesFileName = "globalVariables.yaml"
 
 const GeneratedFilesDirPath = "." +
 	//TODO убрать
-	crossplatform.PATH_SEPARATOR + "temp" +
-	crossplatform.PATH_SEPARATOR
+	crossplatform.PATH_SEPARATOR + "temp"
 
 // GetGlobalVariablesPath Получение пути до файла с глобальными переменными
 func GetGlobalVariablesPath() string {
@@ -30,11 +29,11 @@ func GetGlobalVariablesPath() string {
 
 // GetTemplatesDirPath Возвращает путь до директории, где должны сохраняться примеры шаблонов
 func GetTemplatesDirPath() string {
-	globalVariablesPath := viper.GetString(templatesDirConfigKey)
-	if len(globalVariablesPath) == 0 {
+	templatesDirPath := viper.GetString(templatesDirConfigKey)
+	if len(templatesDirPath) == 0 {
 		return HomeDir() + crossplatform.PATH_SEPARATOR + templateDirName
 	}
-	return globalVariablesPath
+	return templatesDirPath
 }
 
 func HomeDir() string {

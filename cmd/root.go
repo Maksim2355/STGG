@@ -56,6 +56,13 @@ func initConfig() {
 		viper.SetConfigType("yaml")
 		viper.SetConfigName(cfgFileName)
 	}
+	if err := viper.ReadInConfig(); err != nil {
+		if _, ok := err.(viper.ConfigFileNotFoundError); ok {
+			printer.PrintError("Файл с конфиграцией не найден")
+		} else {
+			printer.PrintError("Файл с конфигурацией существует, но появилась ошибка при чтении: " + err.Error())
+		}
+	}
 
 	viper.AutomaticEnv()
 }
