@@ -63,7 +63,8 @@ func RemoveTemplate(templateName string) error {
 
 	for _, tmpl := range allTemplates {
 		if tmpl == templateName {
-			err = utils.RemoveContents(res.GetTemplatesDirPath() + crossplatform.PATH_SEPARATOR + templateName)
+			templatesDir := res.GetTemplatesDirPath() + crossplatform.PATH_SEPARATOR + templateName
+			err = utils.RemoveContents(templatesDir)
 			if err != nil {
 				return errors.New("ошибка при удалении шаблона")
 			}

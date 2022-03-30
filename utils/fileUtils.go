@@ -44,7 +44,7 @@ func RemoveContents(dir string) error {
 			return err
 		}
 	}
-	return nil
+	return os.Remove(dir)
 }
 
 func CountDirsAndFiles(dirPath string) (int, error) {
