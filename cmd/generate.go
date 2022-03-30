@@ -1,42 +1,35 @@
 package cmd
 
 import (
+	"github.com/spf13/cobra"
 	"stgg/cmd/printer"
 	"stgg/tmplengine"
-
-	"github.com/spf13/cobra"
 )
 
 // generateCmd represents the generate command
 var generateCmd = &cobra.Command{
-	Use:   "generate",
+	Use:   "generate [TEMPLATE_NAME] [ARGS..]",
 	Short: "Сгенерировать шаблон, который был ранее сохранен",
 	Long: `Генерация шаблона из списка ранее сохраненных.
 	На вход принимает:
 	TEMPLATE_NAME-название шаблона
 	Остальные аргументы зависят от флага
 
-	Первый способ вызова:
-	-lv: local variables в этом случае мы прописываем переменные для генерации в данной команде через двоеточие
-	variableName1 valueName1 где первое значение-названием переменной, прописанной в шаблоне, а второе - значение переменной
+	По умолчанию принимает список с переменными. Т.е массив с ключом-значением. Внимание, число аргументов должно быть
+	четное, каждому ключу должно соответствовать значение
+
+	При добавление флага --path или -p список переменных для генерации берется из yaml файла, к которому мы предоставим
+	путь т.е вторым аргументом должен быть путь до yaml-файла c вашими переменными
 	
-	Нечетные аргументы означают название переменной, а четные ее значение.
-	Если общее число аргументов нечетное-команда завершится с ошибкой
-	Пример команды с использованием флага -lv:
-	stgg generate TEMPLATE_NAME variable1 value1 variable2 value2 -lv
-
-	Второй способ вызова: 
-	-jsn получение переменных из json файла. В этом случае мы передаем один аргумент-путь до json файла с переменными
-	Читается только первый аргумент. Остальные игнорируются.
-
-	Пример команды с использованием -jsn
-	stgg generate TEMPLATE_NAME JSON_CONFIG_PATH -jsn
-
-	В случае если переменная содержащаяся в аргументах уже сохранена ранее с помошью командой saveVariable, то она будет переопределена
+	Переменные, переданные с помощью данной команды имеют выше приоритет чем глобальные переменные
+	В случае если есть глобальная переменная с таким имене, то будет переопределена
 	`,
+	Example: "stgg generate my_template variable1 value1 variable2 value2\n" +
+		"stgg generate my_template C:/yourPath/variables.yaml --path\n",
+	Args: cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		if len(args) < 1 {
-			printer.PrintErrorAndExit("количестчво аргументов не может быть меньше двух")
+			printer.PrintErrorAndExit("Не передано название шаблона для генерации")
 		}
 		printer.PrintSuccessMessage("Старт генерации")
 
@@ -54,8 +47,8 @@ var generateCmd = &cobra.Command{
 				printer.PrintErrorAndExit(err.Error())
 			}
 		} else {
-			printer.PrintInfoMessage("Генерация шаблона с переменными из конфиг-файла")
 			var ymlPath = args[1]
+			printer.PrintInfoMessage("Генерация шаблона с переменными из конфиг-файла: " + ymlPath)
 			err := tmplengine.GenerateTemplateWithYaml(templateName, ymlPath)
 			if err != nil {
 				printer.PrintErrorAndExit(err.Error())
