@@ -3,7 +3,9 @@
 
 package crossplatform
 
-import "os/exec"
+import (
+	"os/exec"
+)
 
 func OpenFileInExplorer(filePath string) {
 	exec.Command(`explorer`, `/select,`, filePath)

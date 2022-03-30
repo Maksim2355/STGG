@@ -3,6 +3,7 @@ package cmd
 import (
 	"github.com/spf13/cobra"
 	"stgg/cmd/printer"
+	"stgg/crossplatform"
 )
 
 // editTemplateCmd represents the editTemplate command
@@ -17,15 +18,10 @@ var editTemplateCmd = &cobra.Command{
 	
 	В случае если количество аргументов больше или меньше одного, то программа завершается с ошибкой`,
 	Run: func(cmd *cobra.Command, args []string) {
-		if len(args) != 1 {
-			printer.PrintErrorAndExit("Аргумент должен быть один-имя шаблона")
+		if len(args) > 0 {
+			printer.PrintWarning("Аргументы не требуются см документацию")
 		}
-		//var storage = tmplengine.NewStorage()
-		//var templateName = args[0]
-		//err := storage.EditTemplate(templateName)
-		//if err != nil {
-		//	printer.PrintErrorAndExit(err.Error())
-		//}
+		crossplatform.OpenFileInExplorer(СfgFile)
 	},
 }
 

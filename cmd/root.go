@@ -12,7 +12,7 @@ import (
 
 var (
 	// Used for flags.
-	cfgFile     string
+	СfgFile     string
 	cfgFileName = "stggCfg"
 )
 var rootCmd = &cobra.Command{
@@ -34,12 +34,12 @@ func Execute() {
 
 func init() {
 	cobra.OnInitialize(initConfig)
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/stggCfg.yaml)")
+	rootCmd.PersistentFlags().StringVar(&СfgFile, "config", "", "config file (default is $HOME/stggCfg.yaml)")
 }
 
 func initConfig() {
-	if cfgFile != "" {
-		viper.SetConfigFile(cfgFile)
+	if СfgFile != "" {
+		viper.SetConfigFile(СfgFile)
 	} else {
 		home := res.HomeDir()
 		newPathCfgFile := home + crossplatform.PATH_SEPARATOR + cfgFileName + ".yaml"
@@ -52,6 +52,7 @@ func initConfig() {
 				file.Write([]byte(defaultConfig))
 			}
 		}
+		СfgFile = newPathCfgFile
 		viper.AddConfigPath(home)
 		viper.SetConfigType("yaml")
 		viper.SetConfigName(cfgFileName)
