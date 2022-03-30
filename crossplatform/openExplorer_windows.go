@@ -3,10 +3,8 @@
 
 package crossplatform
 
-import (
-	"os/exec"
-)
+import "github.com/skratchdot/open-golang/open"
 
-func OpenFileInExplorer(filePath string) {
-	exec.Command(`explorer`, `/select,`, filePath)
+func OpenFileInExplorer(filePath string) error {
+	return open.Start(filePath)
 }
