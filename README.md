@@ -1,6 +1,6 @@
 # STGG (Simple template generator on Golang)
 
-![logo](picture/logo.jpg)
+![logo](picture/logo.png)
 
 Данный проект представляет собой CLI-утилитку для генерации шаблонных файлов.
 
