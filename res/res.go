@@ -14,9 +14,7 @@ const templateDirName = "templates"
 const globalVariablesDirConfigKey = "globalVariables"
 const globalVariablesFileName = "globalVariables.yaml"
 
-const GeneratedFilesDirPath = "." +
-	//TODO убрать
-	crossplatform.PATH_SEPARATOR + "temp"
+const GeneratedFilesDirPath = "."
 
 // GetGlobalVariablesPath Получение пути до файла с глобальными переменными
 func GetGlobalVariablesPath() string {
