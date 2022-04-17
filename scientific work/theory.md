@@ -59,26 +59,38 @@
 
 Далее возьмем более сложный пример, используем тот же Golang, но уже подключаем к работе его встроенный язык шаблонов
 
-На входе имеем данные о людях и их роде занятий
+На входе имеем данные о книгах и их жанрах
 
 ```Golang
 var data = map[string][]string{
-    "Alexander": []string{"java developer", "father"}
-    "Artem": []string{"android developer"}
+    "Sherlock Holmes": []string{"detective", "adventures"},
+    "Little prince": []string{"children", "classic"},
 }
 ```
 
-Необходимо вывести эту информацию в виде
-
+Необходимо вывести эту информацию в следующем виде:
 ```
-Alexander is
-java developer, 
-father;
-Artem is 
-android developer;
-
+book [genres: list of genres]
+..
 ```
 
+Для начала опишем шаблон с помощью встроенного языка шаблонов golang и выведем результат подстановки в консоль
+
+```Golang
+var tmpl = "{{range $book, $genres := .}} {{$book}} [genres:{{range $genres}} {{.}}{{end}}] \n{{end}}"
+t, _ := template.New("").Parse(tmpl) 
+t.Execute(os.Stdout, data) 
+```
+
+В переменной tmpl мы описывали то, как будет выглядеть наш шаблон. При этом использовали циклы для нужного нам вывода данных
+
+Получим следующий результат:
+```
+Sherlock Holmes [genres: detective, adventures]
+Little prince [genres: children, classic]
+```
+
+Таким образом, мы получили более сложный шаблон при помощи подстановки строк с использованием стандартного языка шаблонов golang
 
 
 ### Data bind
